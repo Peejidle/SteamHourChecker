@@ -41,10 +41,19 @@ func main() {
 		return
 	}
 
-	fmt.Println("Welcome to Steam Hour Checker.","\nWhat game would you like to check?")
-	
+	fmt.Println("Welcome to Steam Hour Checker.","\nFirst enter your personal steam API key.(NEVER SHARE THIS)")
+	scanner.Scan()
+	usrAPIKey := scanner.Text()
+
+	fmt.Prinln("Second, enter your steamID(The numbers in your profile link without the rest of the link. just the numbers)\n")
+	scanner.Scan()
+	usrSteamID := scanner.Text()
+
+	fmt.Println("Now what game do you want to check?\n")
 	scanner.Scan()
 	userGame := scanner.Text()
+
+
 
 	for _, Games := range parsedData.Response.Games {
 		if Games.Name == userGame {
