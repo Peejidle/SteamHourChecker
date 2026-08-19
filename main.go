@@ -29,7 +29,21 @@ func main() {
 
 	scanner := bufio.NewScanner(os.Stdin)
 
-	rawData, err := getData()
+
+	fmt.Println("Welcome to Steam Hour Checker.","\nFirst enter your personal steam API key.(NEVER SHARE THIS)")
+	scanner.Scan()
+	usrAPIKey := scanner.Text()
+
+	fmt.Println("Second, enter your steamID(The numbers in your profile link without the rest of the link. just the numbers)\n")
+	scanner.Scan()
+	usrSteamID := scanner.Text()
+
+	fmt.Println("Now what game do you want to check?\n")
+	scanner.Scan()
+	userGame := scanner.Text()
+
+
+	rawData, err := getData(usrAPIKey, usrSteamID)
 	if err != nil {
 		fmt.Println("Error: Failed to Fetch Steam Data")
 		return
@@ -40,19 +54,6 @@ func main() {
 		fmt.Println("Error: Failed to Parse Steam Data")
 		return
 	}
-
-	fmt.Println("Welcome to Steam Hour Checker.","\nFirst enter your personal steam API key.(NEVER SHARE THIS)")
-	scanner.Scan()
-	usrAPIKey := scanner.Text()
-
-	fmt.Prinln("Second, enter your steamID(The numbers in your profile link without the rest of the link. just the numbers)\n")
-	scanner.Scan()
-	usrSteamID := scanner.Text()
-
-	fmt.Println("Now what game do you want to check?\n")
-	scanner.Scan()
-	userGame := scanner.Text()
-
 
 
 	for _, Games := range parsedData.Response.Games {
@@ -70,8 +71,8 @@ func main() {
 	fmt.Println("No game found, Check for typos or try again")
 }
 
-func getData() ([]byte, error){
-	resp, err := http.Get("PLACEHOLDER") // used to be hard coded in. Working on changing this.
+func getData(usrAPIKey string, usrSteamID string) ([]byte, error){
+	resp, err := http.Get("https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=" + usrAPIKey + "&steamid=" + usrSteamID + "&include_appinfo=true&include_played_free_games=true") 
 	if err != nil {
 		fmt.Println("Error fetching URL", err)
 		return nil, err
